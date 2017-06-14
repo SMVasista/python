@@ -2,6 +2,7 @@ import re
 import json
 import pickle
 import os
+import csv
 from pathlib import Path
 
 # intialize a dict with array elements as keys and value as 
@@ -104,3 +105,32 @@ def replaceNullWithValues(dst, src):
     for idx, value in enumerate(dst):
         if value == None and src[idx] != None:
             dst[idx] = src[idx]
+
+
+def countColumnsInCSV(filename):
+	with open(filename) as f:
+		reader = csv.reader(f, delimiter=',', skipinitialspace=True)
+		first_row = next(reader)
+		num_cols = len(first_row)
+	return num_cols
+
+#This function specifically arrays: converts the 'array' into 'value' of key which is the first element of the inner array
+def reHeadArray(array):
+	key = array.pop(0)
+	return key, array
+
+def mapToFloat(array):
+	mod = []
+	for value in array:
+		value = float(value)
+		mod.append(value)
+	return mod
+
+#Will take column 1 and 2 as a dict
+def readFiletoDict(location):
+	key = readColumn(location, 0)
+	value = readColumn(location, 1)
+	return dict(zip(key, value))
+
+
+#EOF
