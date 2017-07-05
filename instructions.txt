@@ -10,7 +10,7 @@ create list of unique patient barcodes from colums `bcr_patient_uuid` and `bcr_s
 #2 To extract mutation data for each patient barcode
 #Assuming demo/ is the current working directory
 open dnaseq/
-for each barcode, extract all the rows present in the file "step4_gbm_liftover.aggregated.capture.tcga.uuid.maf2.4.migrated.somatic.maf" where $patientBarcode IN `Tumor_Sample_Barcode` (This can be a variable, look for `.maf` in filename) {Note that Tumor_Sample_Barcode will not be exactly equal to $patientBarcode)
+for each barcode, extract all the rows present in the file "step4_gbm_liftover.aggregated.capture.tcga.uuid.maf2.4.migrated.somatic.maf" where $patientBarcode IN `Tumor_Sample_Barcode` (This can be a variable, look for `.maf` in filename) {Note that Tumor_Sample_Barcode will not be exactly equal to $patientBarcode}
 	store  values from `Hugo_Symbol`	`Entrez_Gene_Id	`	`Chromosome`	`Start_position`	`End_position`	`Variant_Classification`	`Variant_Type`	`Reference_Allele`	`Tumor_Seq_Allele1`	`Tumor_Seq_Allele2`	`dbSNP_RS` where 'Tumor_Sample_Barcode` is barcode of patient in question
 # Row5 of the file contains the actual column name
 	[ SELECT `col1, col2, col3...` WHERE $patientBarcode in `Tumor_Sample_Barcode` ]
