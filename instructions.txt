@@ -1,0 +1,40 @@
+#1. To extract list of patient barcodes from the meta(data) directory
+#Assuming demo/ is the current working directory
+open meta/
+open file_manifest.txt - this contains all the files which points to different datasets captured from different sources and centers
+extract list of files from `File Name` column
+access file from the location meta/Clinical/Biotab/`File Name`
+open ./Clinical/Biotab/`File Name`
+create list of unique patient barcodes from colums `bcr_patient_uuid` and `bcr_sample_barcode` (This can be captured as a dict as we will reuse this information - can be stored in table)
+
+#2 To extract mutation data for each patient barcode
+#Assuming demo/ is the current working directory
+open dnaseq/
+for each barcode, extract all the rows present in the file "step4_gbm_liftover.aggregated.capture.tcga.uuid.maf2.4.migrated.somatic.maf" where $patientBarcode IN `Tumor_Sample_Barcode` (This can be a variable, look for `.maf` in filename) {Note that Tumor_Sample_Barcode will not be exactly equal to $patientBarcode)
+	store  values from `Hugo_Symbol`	`Entrez_Gene_Id	`	`Chromosome`	`Start_position`	`End_position`	`Variant_Classification`	`Variant_Type`	`Reference_Allele`	`Tumor_Seq_Allele1`	`Tumor_Seq_Allele2`	`dbSNP_RS` where 'Tumor_Sample_Barcode` is barcode of patient in question
+# Row5 of the file contains the actual column name
+	[ SELECT `col1, col2, col3...` WHERE $patientBarcode in `Tumor_Sample_Barcode` ]
+	(can be stored in separate table)
+
+#3 To extract methylation data for each patient barcode
+#Assuming demo/ is the current working directory
+open dnamethylation27/ and dnamethylation450/
+for each barcode, open file where file name has barcode in it (*$patientBarcode*.txt)
+	store values from	`Beta_value`	`Gene_Symbol` `Chromosome` (This is a patient specific file so by default store every row in the file)
+	(can be stored in separate table)
+# Note : For patient barcode, information can exist in dnamethylation27/ or dnamethylation450/ or both or none
+
+#4 To extract CNV data for each patient barcode
+#Assuming demo/ is the current working directory
+# 4a. To get hybridization file name 
+open cnv/home/sumanth/Desktop/TCGA/demo/cnv/broad.mit.edu_GBM.Genome_Wide_SNP_6.mage-tab.tar.gz and extract this file (one time thing?)
+open file "broad.mit.edu_GBM.Genome_Wide_SNP_6.sdrf.txt"
+#4b Extracting seg_mean values for each patient from the respective files
+for each barcode, select the corresponding name in the `Hybridization Name` - this will be the file name for the patient
+	[ SELECT  'Hybridization Name' WHERE  "$patientBarcode" in `Comment [TCGA Barcode]`  ]
+	The required files are, "`Hybridization Name`.hg19.seq.txt",  "`Hybridization Name`.noncnv_hg19.seq.txt"
+	From each file, extract all rows  (This is a patient specific file so by default store every row in the file)
+	store values from columns `Start`	`End`	`Segment_Mean`
+	(can be stored in separate table)
+
+So we can have three tables and a which has common elements $patientBarcode and $patientUUID (stored from step 1) which connects all the three tables
