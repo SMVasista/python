@@ -26,12 +26,11 @@ for each barcode, open file where file name has barcode in it (*$patientBarcode*
 
 #4 To extract CNV data for each patient barcode
 #Assuming demo/ is the current working directory
-# 4a. To get hybridization file name 
-open cnv/home/sumanth/Desktop/TCGA/demo/cnv/broad.mit.edu_GBM.Genome_Wide_SNP_6.mage-tab.tar.gz and extract this file (one time thing?)
-open file "broad.mit.edu_GBM.Genome_Wide_SNP_6.sdrf.txt"
-#4b Extracting seg_mean values for each patient from the respective files
-for each barcode, select the corresponding name in the `Hybridization Name` - this will be the file name for the patient
+# 4a. To get hybridization file name
+extract the tar gz cnv/broad.mit.edu_GBM.Genome_Wide_SNP_6.mage-tab.tar.gz and open file broad.mit.edu_GBM.Genome_Wide_SNP_6.sdrf.txt" INSIDE it
+for each barcode, select the corresponding name in the `Hybridization Name` (from the above file - "broad.mit.edu_GBM.Genome_Wide_SNP_6.sdrf.txt") - this will be the file name for the patient
 	[ SELECT  'Hybridization Name' WHERE  "$patientBarcode" in `Comment [TCGA Barcode]`  ]
+#4b Extracting seg_mean values for each patient from the respective files
 	The required files are, "`Hybridization Name`.hg19.seq.txt",  "`Hybridization Name`.noncnv_hg19.seq.txt"
 	From each file, extract all rows  (This is a patient specific file so by default store every row in the file)
 	store values from columns `Start`	`End`	`Segment_Mean`
