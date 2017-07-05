@@ -4,7 +4,7 @@ open meta/
 open file_manifest.txt - this contains all the files which points to different datasets captured from different sources and centers
 extract list of files from `File Name` column
 access file from the location meta/Clinical/Biotab/`File Name`
-open ./Clinical/Biotab/`File Name`
+open meta/Clinical/Biotab/`File Name`
 create list of unique patient barcodes from colums `bcr_patient_uuid` and `bcr_sample_barcode` (This can be captured as a dict as we will reuse this information - can be stored in table)
 
 #2 To extract mutation data for each patient barcode
