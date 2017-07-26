@@ -4,8 +4,15 @@ import numpy as NP
 import sys, re, os, random, pickle
 import cwgutils
 
-def parseExpressionData(mxpfile):
+with open('./NVD.data','r+') as f:
+  W = pickle.load(f)
+with open('./COM.data','r+') as f:
+  C = pickle.load(f)
+
+def captureBiomarkerData(mxpfile):
   
+
+def parseExpressionData(mxpfile):
 
 
 if __name__=="__main__":
